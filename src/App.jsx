@@ -50,8 +50,21 @@ const T = {
     codeError: "Ongeldige code. Probeer opnieuw.",
     codeSuccess: "✓ Toegang verleend!",
     accessGranted: "✓ Toegang verleend",
+    lifetime: "Levenslang",
+    daysLeft: (n) => `Nog ${n} dagen`,
     privacyNote: "Je contract wordt veilig verwerkt en nooit opgeslagen.",
     lang: "NL",
+    pdfOnly: "Alleen PDF bestanden zijn toegestaan.",
+    fileTooLarge: "Bestand is te groot. Maximum is 10MB.",
+    errorGeneric: "Er is een fout opgetreden. Probeer het opnieuw.",
+    contractSelected: "Contract geselecteerd",
+    clickToChange: "Klik om een ander bestand te kiezen",
+    positivePoints: "Positieve punten",
+    noFlagged: "Geen aandachtspunten gevonden.",
+    starterPeriodLabel: "3 maanden",
+    proPeriod: "1 jaar",
+    starterPeriod: "Voor altijd",
+    mostPopular: "MEEST GEKOZEN",
   },
   en: {
     logo: "Contract2Check",
@@ -95,8 +108,79 @@ const T = {
     codeError: "Invalid code. Please try again.",
     codeSuccess: "✓ Access granted!",
     accessGranted: "✓ Access granted",
+    lifetime: "Lifetime",
+    daysLeft: (n) => `${n} days left`,
     privacyNote: "Your contract is processed securely and never stored.",
     lang: "EN",
+    pdfOnly: "Only PDF files are allowed.",
+    fileTooLarge: "File too large. Maximum is 10MB.",
+    errorGeneric: "An error occurred. Please try again.",
+    contractSelected: "Contract selected",
+    clickToChange: "Click to select a different file",
+    positivePoints: "Positive points",
+    noFlagged: "No points of attention found.",
+    starterPeriodLabel: "3 months",
+    proPeriod: "1 year",
+    starterPeriod: "Forever",
+    mostPopular: "MOST POPULAR",
+  },
+  fr: {
+    logo: "Contract2Check",
+    tagline: "Comprenez ce que vous signez.",
+    subtitle: "Importez votre contrat de travail. Notre IA explique chaque clause en langage clair, signale les termes abusifs et compare avec le droit du travail néerlandais.",
+    uploadLabel: "Déposez votre contrat ici",
+    uploadSub: "ou cliquez pour parcourir · PDF jusqu'à 10 Mo",
+    uploadBtn: "Sélectionner un PDF",
+    analyseBtn: "Analyser mon contrat →",
+    analysing: "Analyse du contrat...",
+    freeLeft: (n) => `${n} analyse gratuite restante`,
+    noFree: "Limite gratuite atteinte",
+    overall: "Évaluation générale",
+    overallScore: "Score du contrat",
+    summary: "Résumé",
+    clauses: "Clauses",
+    flagged: "Points d'attention",
+    risk: { low: "Faible risque", medium: "Risque moyen", high: "Risque élevé" },
+    riskLabel: "Risque",
+    lawRef: "Référence légale",
+    explanation: "Explication",
+    recommendation: "Recommandation",
+    copyBtn: "📋 Copier l'analyse",
+    copied: "✓ Copié",
+    newAnalysis: "Analyser un nouveau contrat",
+    disclaimer: "Contract2Check ne fournit pas de conseils juridiques. L'analyse est indicative et basée sur les principes généraux du droit du travail néerlandais. Consultez un juriste pour des conseils spécifiques.",
+    footerBy: "Contract2Check par",
+    footerRates: "Basé sur le droit du travail néerlandais",
+    paywallTitle: "Votre analyse gratuite a été utilisée",
+    paywallSub: "Paiement unique. Sans abonnement.",
+    features: ["Analyses de contrats illimitées", "Explication clause par clause", "Score de risque par clause", "Comparaison avec la loi néerlandaise", "Points d'attention signalés"],
+    alreadyPaid: "Déjà payé ? Entrez votre email pour déverrouiller",
+    emailPlaceholder: "votre@email.com",
+    unlockBtn: "Déverrouiller",
+    checking: "...",
+    unlocked: "✓",
+    emailError: "Aucun achat actif trouvé pour cet email.",
+    emailExpired: "Votre accès a expiré. Veuillez acheter un nouveau plan.",
+    emailSuccess: (d) => `✓ Accès accordé ! ${d} jours restants.`,
+    hasCode: "Vous avez un code d'accès ?",
+    codeError: "Code invalide. Veuillez réessayer.",
+    codeSuccess: "✓ Accès accordé !",
+    accessGranted: "✓ Accès accordé",
+    lifetime: "À vie",
+    daysLeft: (n) => `${n} jours restants`,
+    privacyNote: "Votre contrat est traité de manière sécurisée et n'est jamais stocké.",
+    lang: "FR",
+    pdfOnly: "Seuls les fichiers PDF sont autorisés.",
+    fileTooLarge: "Fichier trop volumineux. Maximum 10 Mo.",
+    errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    contractSelected: "Contrat sélectionné",
+    clickToChange: "Cliquez pour choisir un autre fichier",
+    positivePoints: "Points positifs",
+    noFlagged: "Aucun point d'attention trouvé.",
+    starterPeriod: "À vie",
+    proPeriod: "1 an",
+    starterPeriodLabel: "3 mois",
+    mostPopular: "LE PLUS POPULAIRE",
   },
 };
 
@@ -199,12 +283,12 @@ function PaywallModal({ onClose, onWhitelisted, t }) {
 
         {/* Pricing tiers */}
         {[
-          { label: "Starter", period: t.lang === "NL" ? "3 maanden" : "3 months", price: "€15" },
-          { label: "Pro", period: t.lang === "NL" ? "1 jaar" : "1 year", price: "€39", popular: true },
-          { label: "Lifetime", period: t.lang === "NL" ? "Voor altijd" : "Forever", price: "€79" },
+          { label: "Starter", period: t.starterPeriodLabel, price: "€15" },
+          { label: "Pro", period: t.proPeriod, price: "€39", popular: true },
+          { label: "Lifetime", period: t.starterPeriod, price: "€79" },
         ].map((tier) => (
           <a key={tier.label} href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: tier.popular ? "#1a1a1a" : "rgba(255,255,255,0.03)", border: `1px solid ${tier.popular ? "#22c55e" : "rgba(255,255,255,0.08)"}`, borderRadius: 12, padding: "14px 16px", marginBottom: 8, textDecoration: "none", cursor: "pointer", position: "relative" }}>
-            {tier.popular && <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#22c55e", color: "white", fontSize: 9, fontWeight: 700, padding: "3px 10px", borderRadius: 100, letterSpacing: "0.1em", whiteSpace: "nowrap" }}>{t.lang === "NL" ? "MEEST GEKOZEN" : "MOST POPULAR"}</div>}
+            {tier.popular && <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#22c55e", color: "white", fontSize: 9, fontWeight: 700, padding: "3px 10px", borderRadius: 100, letterSpacing: "0.1em", whiteSpace: "nowrap" }}>{t.mostPopular}</div>}
             <div>
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#f0ece8" }}>{tier.label}</div>
               <div style={{ fontSize: 11, color: "rgba(240,236,232,0.4)", marginTop: 2 }}>{tier.period}</div>
@@ -248,11 +332,11 @@ function PaywallModal({ onClose, onWhitelisted, t }) {
         ) : (
           <div style={{ marginTop: 8 }}>
             <div style={{ display: "flex", gap: 8 }}>
-              <input type="text" value={code} onChange={e => setCode(e.target.value)} onKeyDown={e => e.key === "Enter" && handleValidateCode()} placeholder={t.lang === "NL" ? "Toegangscode" : "Access code"}
+              <input type="text" value={code} onChange={e => setCode(e.target.value)} onKeyDown={e => e.key === "Enter" && handleValidateCode()} placeholder={t.lang === "NL" ? "Toegangscode" : t.lang === "FR" ? "Code d'accès" : "Access code"}
                 style={{ flex: 1, background: "rgba(255,255,255,0.05)", border: `1px solid ${codeStatus === "error" ? "rgba(255,80,80,0.4)" : codeStatus === "success" ? "rgba(80,200,120,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: 8, padding: "10px 14px", color: "#f0ece8", fontFamily: "'DM Sans', sans-serif", fontSize: 13, outline: "none" }} />
               <button onClick={handleValidateCode} disabled={codeStatus === "checking" || codeStatus === "success"}
                 style={{ background: codeStatus === "success" ? "rgba(80,200,120,0.2)" : "rgba(34,197,94,0.15)", border: `1px solid ${codeStatus === "success" ? "rgba(80,200,120,0.3)" : "rgba(34,197,94,0.3)"}`, color: codeStatus === "success" ? "#50c878" : "#22c55e", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600 }}>
-                {codeStatus === "checking" ? t.checking : codeStatus === "success" ? t.unlocked : t.lang === "NL" ? "Toepassen" : "Apply"}
+                {codeStatus === "checking" ? t.checking : codeStatus === "success" ? t.unlocked : t.lang === "NL" ? "Toepassen" : t.lang === "FR" ? "Appliquer" : "Apply"}
               </button>
             </div>
             {codeStatus === "error" && <p style={{ color: "#ff8080", fontSize: 11, marginTop: 6, textAlign: "center" }}>{t.codeError}</p>}
@@ -374,8 +458,8 @@ export default function App() {
   }, []);
 
   const handleFile = (f) => {
-    if (!f || f.type !== "application/pdf") { setError(lang === "nl" ? "Alleen PDF bestanden zijn toegestaan." : "Only PDF files are allowed."); return; }
-    if (f.size > 10 * 1024 * 1024) { setError(lang === "nl" ? "Bestand is te groot. Maximum is 10MB." : "File too large. Maximum is 10MB."); return; }
+    if (!f || f.type !== "application/pdf") { setError(t.pdfOnly); return; }
+    if (f.size > 10 * 1024 * 1024) { setError(t.fileTooLarge); return; }
     setFile(f);
     setFileName(f.name);
     setError("");
@@ -419,7 +503,7 @@ export default function App() {
       reader.readAsDataURL(file);
     } catch (err) {
       if (err.name !== "AbortError") {
-        setError(lang === "nl" ? "Er is een fout opgetreden. Probeer het opnieuw." : "An error occurred. Please try again.");
+        setError(t.errorGeneric);
         setLoading(false);
       }
     }
@@ -542,19 +626,20 @@ export default function App() {
           <div className="header-right">
             {isWhitelisted && (
               <span className="badge">
-                ✓ {accessPlan || t.accessGranted.replace("✓ ", "")}{accessPlan && accessPlan !== "Lifetime" && accessDaysLeft ? ` · ${accessDaysLeft} days left` : accessPlan === "Lifetime" ? " · Lifetime" : ""}
+                ✓ {accessPlan ? (accessPlan === "Lifetime" ? t.lifetime : accessPlan) : t.accessGranted.replace("✓ ", "")}{accessPlan && accessPlan !== "Lifetime" && accessDaysLeft ? ` · ${t.daysLeft(accessDaysLeft)}` : accessPlan === "Lifetime" ? ` · ${t.lifetime}` : ""}
               </span>
             )}
             <div className="lang-seg">
               <button className={`lang-btn${lang === "nl" ? " active" : ""}`} onClick={() => setLang("nl")}>🇳🇱 NL</button>
               <button className={`lang-btn${lang === "en" ? " active" : ""}`} onClick={() => setLang("en")}>🇬🇧 EN</button>
+              <button className={`lang-btn${lang === "fr" ? " active" : ""}`} onClick={() => setLang("fr")}>🇫🇷 FR</button>
             </div>
           </div>
         </div>
 
         {/* Hero */}
         <div className="hero">
-          <h1>{lang === "nl" ? <>Begrijp wat je<br /><em>tekent.</em></> : <>Understand what<br /><em>you sign.</em></>}</h1>
+          <h1>{lang === "nl" ? <>Begrijp wat je<br /><em>tekent.</em></> : lang === "fr" ? <>Comprenez ce que<br /><em>vous signez.</em></> : <>Understand what<br /><em>you sign.</em></>}</h1>
           <p className="subtitle">{t.subtitle}</p>
         </div>
 
@@ -571,9 +656,9 @@ export default function App() {
               <div className="upload-icon">{file ? "📄" : "📋"}</div>
               {file ? (
                 <>
-                  <div className="upload-label">{lang === "nl" ? "Contract geselecteerd" : "Contract selected"}</div>
+                  <div className="upload-label">{t.contractSelected}</div>
                   <div className="upload-file-name">{fileName}</div>
-                  <div className="upload-sub" style={{ marginTop: 6 }}>{lang === "nl" ? "Klik om een ander bestand te kiezen" : "Click to select a different file"}</div>
+                  <div className="upload-sub" style={{ marginTop: 6 }}>{t.clickToChange}</div>
                 </>
               ) : (
                 <>
@@ -624,7 +709,7 @@ export default function App() {
                 <p style={{ fontSize: 14, fontWeight: 300, color: "rgba(240,236,232,0.7)", lineHeight: 1.75 }}>{result.detailedSummary || result.summary}</p>
                 {result.positives && result.positives.length > 0 && (
                   <div style={{ marginTop: 20 }}>
-                    <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(240,236,232,0.35)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>{lang === "nl" ? "Positieve punten" : "Positive points"}</div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(240,236,232,0.35)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>{t.positivePoints}</div>
                     {result.positives.map((p, i) => (
                       <div key={i} style={{ display: "flex", gap: 10, marginBottom: 8 }}>
                         <span style={{ color: "#50c878", fontSize: 14, flexShrink: 0 }}>✓</span>
@@ -666,7 +751,7 @@ export default function App() {
               <div>
                 {(result.flagged || []).length === 0 ? (
                   <div style={{ textAlign: "center", padding: "32px 0", color: "rgba(240,236,232,0.4)", fontSize: 14 }}>
-                    {lang === "nl" ? "Geen aandachtspunten gevonden." : "No points of attention found."}
+                    {t.noFlagged}
                   </div>
                 ) : (
                   (result.flagged || []).map((item, i) => (
@@ -695,7 +780,7 @@ export default function App() {
         <div className="footer">
           <p>{t.footerBy} <a href="https://nexiotools.nl" target="_blank" rel="noopener noreferrer">nexiotools.nl</a> &mdash; {t.footerRates}</p>
           <p style={{ marginTop: 6 }}>
-            {lang === "nl" ? "Je contract wordt veilig verwerkt en nooit opgeslagen." : "Your contract is processed securely and never stored."} &nbsp;
+            {t.privacyNote} &nbsp;
             <a href="https://nexiotools.nl/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
             &nbsp;·&nbsp;
             <a href="https://nexiotools.nl/terms.html" target="_blank" rel="noopener noreferrer">Terms of Service</a>
