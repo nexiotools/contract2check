@@ -2,7 +2,7 @@ import crypto from "crypto";
 
 // Product variant IDs → access duration in days + plan name
 const VARIANT_ACCESS = {
-  // Contract2Check live
+  // ContractClarity live
   1571299: { days: 90,    plan: "Starter" },
   1571300: { days: 365,   plan: "Pro" },
   1571301: { days: 36500, plan: "Lifetime" },
