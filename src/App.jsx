@@ -15,6 +15,10 @@ const T = {
     uploadLabel: "Sleep je contract hierheen",
     uploadSub: "of klik om te bladeren · PDF tot 10MB",
     uploadBtn: "Selecteer PDF",
+    pasteTab: "Tekst plakken",
+    pdfTab: "PDF uploaden",
+    pastePlaceholder: "Plak hier de tekst van je arbeidscontract...",
+    pasteMin: "Minimaal 200 tekens vereist.",
     analyseBtn: "Analyseer mijn contract →",
     analysing: "Contract wordt geanalyseerd...",
     freeLeft: (n) => `${n} gratis analyse resterend`,
@@ -73,6 +77,10 @@ const T = {
     uploadLabel: "Drop your contract here",
     uploadSub: "or click to browse · PDF up to 10MB",
     uploadBtn: "Select PDF",
+    pasteTab: "Paste text",
+    pdfTab: "Upload PDF",
+    pastePlaceholder: "Paste your employment contract text here...",
+    pasteMin: "At least 200 characters required.",
     analyseBtn: "Analyse my contract →",
     analysing: "Analysing contract...",
     freeLeft: (n) => `${n} free analysis remaining`,
@@ -131,6 +139,10 @@ const T = {
     uploadLabel: "Déposez votre contrat ici",
     uploadSub: "ou cliquez pour parcourir · PDF jusqu'à 10 Mo",
     uploadBtn: "Sélectionner un PDF",
+    pasteTab: "Coller le texte",
+    pdfTab: "Importer un PDF",
+    pastePlaceholder: "Collez ici le texte de votre contrat de travail...",
+    pasteMin: "Au moins 200 caractères requis.",
     analyseBtn: "Analyser mon contrat →",
     analysing: "Analyse du contrat...",
     freeLeft: (n) => `${n} analyse gratuite restante`,
@@ -390,6 +402,8 @@ export default function App() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   const [dragOver, setDragOver] = useState(false);
+  const [inputMode, setInputMode] = useState("pdf"); // pdf | paste
+  const [contractText, setContractText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
@@ -467,45 +481,51 @@ export default function App() {
   };
 
   const handleAnalyse = async () => {
-    if (!file) return;
+    if (inputMode === "pdf" && !file) return;
+    if (inputMode === "paste" && contractText.trim().length < 200) { setError(t.pasteMin); return; }
     if (!isWhitelisted && usesCount >= FREE_LIMIT) { setShowPaywall(true); return; }
 
     setLoading(true);
     setError("");
     setResult(null);
 
-    try {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const base64 = e.target.result.split(",")[1];
-
-        abortRef.current = new AbortController();
-        const res = await fetch("/api/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ base64, lang }),
-          signal: abortRef.current.signal,
-        });
-
-        if (!res.ok) throw new Error("API error");
-        const data = await res.json();
-
-        if (!isWhitelisted) {
-          const newCount = usesCount + 1;
-          setUsesCount(newCount);
-          try { localStorage.setItem(STORAGE_KEY, String(newCount)); } catch {}
-        }
-
-        setResult(data);
-        setActiveTab("summary");
-        setLoading(false);
-      };
-      reader.readAsDataURL(file);
-    } catch (err) {
-      if (err.name !== "AbortError") {
-        setError(t.errorGeneric);
-        setLoading(false);
+    const doFetch = async (body) => {
+      abortRef.current = new AbortController();
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...body, lang }),
+        signal: abortRef.current.signal,
+      });
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      if (!isWhitelisted) {
+        const newCount = usesCount + 1;
+        setUsesCount(newCount);
+        try { localStorage.setItem(STORAGE_KEY, String(newCount)); } catch {}
       }
+      setResult(data);
+      setActiveTab("summary");
+      setLoading(false);
+    };
+
+    try {
+      if (inputMode === "paste") {
+        await doFetch({ contractText: contractText.trim() });
+      } else {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            const base64 = e.target.result.split(",")[1];
+            await doFetch({ base64 });
+          } catch (err) {
+            if (err.name !== "AbortError") { setError(t.errorGeneric); setLoading(false); }
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err) {
+      if (err.name !== "AbortError") { setError(t.errorGeneric); setLoading(false); }
     }
   };
 
@@ -648,35 +668,56 @@ export default function App() {
           <p className="subtitle">{t.subtitle}</p>
         </div>
 
-        {/* Upload */}
+        {/* Upload / Paste */}
         {!result && (
           <>
-            <div
-              className={`upload-area${dragOver ? " drag" : ""}${file ? " has-file" : ""}`}
-              onClick={() => fileInputRef.current?.click()}
-              onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-              onDragLeave={() => setDragOver(false)}
-              onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
-            >
-              <div className="upload-icon">{file ? "📄" : "📋"}</div>
-              {file ? (
-                <>
-                  <div className="upload-label">{t.contractSelected}</div>
-                  <div className="upload-file-name">{fileName}</div>
-                  <div className="upload-sub" style={{ marginTop: 6 }}>{t.clickToChange}</div>
-                </>
-              ) : (
-                <>
-                  <div className="upload-label">{t.uploadLabel}</div>
-                  <div className="upload-sub">{t.uploadSub}</div>
-                </>
-              )}
-              <input ref={fileInputRef} type="file" accept=".pdf" style={{ display: "none" }} onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
+            {/* Mode toggle */}
+            <div style={{ display: "flex", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden", marginTop: 32 }}>
+              <button onClick={() => { setInputMode("pdf"); setError(""); }} style={{ flex: 1, padding: "10px 16px", background: inputMode === "pdf" ? "#22c55e" : "transparent", border: "none", color: inputMode === "pdf" ? "#fff" : "rgba(240,236,232,0.45)", fontFamily: "DM Sans, sans-serif", fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.18s" }}>
+                📄 {t.pdfTab}
+              </button>
+              <button onClick={() => { setInputMode("paste"); setError(""); }} style={{ flex: 1, padding: "10px 16px", background: inputMode === "paste" ? "#22c55e" : "transparent", border: "none", color: inputMode === "paste" ? "#fff" : "rgba(240,236,232,0.45)", fontFamily: "DM Sans, sans-serif", fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.18s" }}>
+                📋 {t.pasteTab}
+              </button>
             </div>
+
+            {inputMode === "pdf" ? (
+              <div
+                className={`upload-area${dragOver ? " drag" : ""}${file ? " has-file" : ""}`}
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
+              >
+                <div className="upload-icon">{file ? "📄" : "📋"}</div>
+                {file ? (
+                  <>
+                    <div className="upload-label">{t.contractSelected}</div>
+                    <div className="upload-file-name">{fileName}</div>
+                    <div className="upload-sub" style={{ marginTop: 6 }}>{t.clickToChange}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="upload-label">{t.uploadLabel}</div>
+                    <div className="upload-sub">{t.uploadSub}</div>
+                  </>
+                )}
+                <input ref={fileInputRef} type="file" accept=".pdf" style={{ display: "none" }} onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
+              </div>
+            ) : (
+              <textarea
+                value={contractText}
+                onChange={e => setContractText(e.target.value)}
+                placeholder={t.pastePlaceholder}
+                style={{ width: "100%", marginTop: 16, minHeight: 220, background: "rgba(255,255,255,0.03)", border: "1.5px dashed rgba(255,255,255,0.12)", borderRadius: 16, color: "#f0ece8", fontFamily: "DM Sans, sans-serif", fontSize: 14, fontWeight: 300, lineHeight: 1.7, padding: 20, resize: "vertical", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" }}
+                onFocus={e => e.target.style.borderColor = "rgba(34,197,94,0.4)"}
+                onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
+              />
+            )}
 
             {error && <div className="error">{error}</div>}
 
-            <button className="analyse-btn" onClick={handleAnalyse} disabled={!file || loading}>
+            <button className="analyse-btn" onClick={handleAnalyse} disabled={(inputMode === "pdf" ? !file : contractText.trim().length < 10) || loading}>
               {loading ? <><span className="spinner" /> {t.analysing}</> : t.analyseBtn}
             </button>
 
