@@ -69,7 +69,7 @@ const T = {
   en: {
     logo: "ContractClarity",
     tagline: "Understand what you sign.",
-    subtitle: "Upload your employment contract. Our AI explains every clause in plain language, flags unfair terms and compares against Dutch law.",
+    subtitle: "Upload your employment contract. Our AI explains every clause in plain language, flags unfair terms and compares against applicable employment law.",
     uploadLabel: "Drop your contract here",
     uploadSub: "or click to browse · PDF up to 10MB",
     uploadBtn: "Select PDF",
@@ -90,12 +90,12 @@ const T = {
     copyBtn: "📋 Copy analysis",
     copied: "✓ Copied",
     newAnalysis: "Analyse new contract",
-    disclaimer: "ContractClarity does not provide legal advice. The analysis is indicative and based on general Dutch employment law principles. Consult a lawyer for specific advice.",
+    disclaimer: "ContractClarity does not provide legal advice. The analysis is indicative and based on general employment law principles of the selected jurisdiction. Consult a lawyer for specific advice.",
     footerBy: "ContractClarity by",
-    footerRates: "Based on Dutch employment law",
+    footerRates: "Based on applicable employment law",
     paywallTitle: "Your free analysis has been used",
     paywallSub: "One-time payment. No subscription.",
-    features: ["Unlimited contract analyses", "Clause-by-clause explanation", "Risk score per clause", "Comparison with Dutch law", "Flagged points of attention"],
+    features: ["Unlimited contract analyses", "Clause-by-clause explanation", "Risk score per clause", "Comparison with applicable employment law", "Flagged points of attention"],
     alreadyPaid: "Already paid? Enter your email to unlock",
     emailPlaceholder: "your@email.com",
     unlockBtn: "Unlock",
@@ -127,7 +127,7 @@ const T = {
   fr: {
     logo: "ContractClarity",
     tagline: "Comprenez ce que vous signez.",
-    subtitle: "Importez votre contrat de travail. Notre IA explique chaque clause en langage clair, signale les termes abusifs et compare avec le droit du travail néerlandais.",
+    subtitle: "Importez votre contrat de travail. Notre IA explique chaque clause en langage clair, signale les termes abusifs et compare avec le Code du travail français.",
     uploadLabel: "Déposez votre contrat ici",
     uploadSub: "ou cliquez pour parcourir · PDF jusqu'à 10 Mo",
     uploadBtn: "Sélectionner un PDF",
@@ -148,12 +148,12 @@ const T = {
     copyBtn: "📋 Copier l'analyse",
     copied: "✓ Copié",
     newAnalysis: "Analyser un nouveau contrat",
-    disclaimer: "ContractClarity ne fournit pas de conseils juridiques. L'analyse est indicative et basée sur les principes généraux du droit du travail néerlandais. Consultez un juriste pour des conseils spécifiques.",
+    disclaimer: "ContractClarity ne fournit pas de conseils juridiques. L'analyse est indicative et basée sur les principes généraux du droit du travail français (Code du travail). Consultez un juriste pour des conseils spécifiques.",
     footerBy: "ContractClarity par",
-    footerRates: "Basé sur le droit du travail néerlandais",
+    footerRates: "Basé sur le Code du travail français",
     paywallTitle: "Votre analyse gratuite a été utilisée",
     paywallSub: "Paiement unique. Sans abonnement.",
-    features: ["Analyses de contrats illimitées", "Explication clause par clause", "Score de risque par clause", "Comparaison avec la loi néerlandaise", "Points d'attention signalés"],
+    features: ["Analyses de contrats illimitées", "Explication clause par clause", "Score de risque par clause", "Comparaison avec le Code du travail français", "Points d'attention signalés"],
     alreadyPaid: "Déjà payé ? Entrez votre email pour déverrouiller",
     emailPlaceholder: "votre@email.com",
     unlockBtn: "Déverrouiller",
@@ -629,10 +629,15 @@ export default function App() {
                 ✓ {accessPlan ? (accessPlan === "Lifetime" ? t.lifetime : accessPlan) : t.accessGranted.replace("✓ ", "")}{accessPlan && accessPlan !== "Lifetime" && accessDaysLeft ? ` · ${t.daysLeft(accessDaysLeft)}` : accessPlan === "Lifetime" ? ` · ${t.lifetime}` : ""}
               </span>
             )}
-            <div className="lang-seg">
-              <button className={`lang-btn${lang === "nl" ? " active" : ""}`} onClick={() => setLang("nl")}>🇳🇱 NL</button>
-              <button className={`lang-btn${lang === "en" ? " active" : ""}`} onClick={() => setLang("en")}>🇬🇧 EN</button>
-              <button className={`lang-btn${lang === "fr" ? " active" : ""}`} onClick={() => setLang("fr")}>🇫🇷 FR</button>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div className="badge" style={{ fontSize: 10 }}>
+                ⚖ {lang === "nl" ? "Nederlands arbeidsrecht" : lang === "fr" ? "Code du travail français" : "Employment law"}
+              </div>
+              <div className="lang-seg">
+                <button className={`lang-btn${lang === "nl" ? " active" : ""}`} onClick={() => setLang("nl")}>🇳🇱 NL</button>
+                <button className={`lang-btn${lang === "en" ? " active" : ""}`} onClick={() => setLang("en")}>🇬🇧 EN</button>
+                <button className={`lang-btn${lang === "fr" ? " active" : ""}`} onClick={() => setLang("fr")}>🇫🇷 FR</button>
+              </div>
             </div>
           </div>
         </div>
