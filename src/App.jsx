@@ -3,13 +3,13 @@ import { useState, useEffect, useRef } from "react";
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const CHECKOUT_URL = "https://nexiotools.lemonsqueezy.com/checkout/buy/810771d8-f28e-4eb6-9624-d6e8f6a6e46f";
 const FREE_LIMIT = 1;
-const STORAGE_KEY = "contract2check_uses";
-const WHITELIST_KEY = "contract2check_whitelisted";
+const STORAGE_KEY = "contractclarity_uses";
+const WHITELIST_KEY = "contractclarity_whitelisted";
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
 const T = {
   nl: {
-    logo: "Contract2Check",
+    logo: "ContractClarity",
     tagline: "Begrijp wat je tekent.",
     subtitle: "Upload je arbeidscontract. Onze AI legt elke clausule uit in begrijpelijke taal, signaleert oneerlijke voorwaarden en vergelijkt met de Nederlandse wetgeving.",
     uploadLabel: "Sleep je contract hierheen",
@@ -32,8 +32,8 @@ const T = {
     copyBtn: "📋 Kopieer analyse",
     copied: "✓ Gekopieerd",
     newAnalysis: "Nieuw contract analyseren",
-    disclaimer: "Contract2Check biedt geen juridisch advies. De analyse is indicatief en gebaseerd op algemene Nederlandse arbeidsrechtprincipes. Raadpleeg een jurist voor specifiek advies.",
-    footerBy: "Contract2Check door",
+    disclaimer: "ContractClarity biedt geen juridisch advies. De analyse is indicatief en gebaseerd op algemene Nederlandse arbeidsrechtprincipes. Raadpleeg een jurist voor specifiek advies.",
+    footerBy: "ContractClarity door",
     footerRates: "Gebaseerd op Nederlands arbeidsrecht",
     paywallTitle: "Je gratis analyse is gebruikt",
     paywallSub: "Eenmalige betaling. Geen abonnement.",
@@ -67,7 +67,7 @@ const T = {
     mostPopular: "MEEST GEKOZEN",
   },
   en: {
-    logo: "Contract2Check",
+    logo: "ContractClarity",
     tagline: "Understand what you sign.",
     subtitle: "Upload your employment contract. Our AI explains every clause in plain language, flags unfair terms and compares against Dutch law.",
     uploadLabel: "Drop your contract here",
@@ -90,8 +90,8 @@ const T = {
     copyBtn: "📋 Copy analysis",
     copied: "✓ Copied",
     newAnalysis: "Analyse new contract",
-    disclaimer: "Contract2Check does not provide legal advice. The analysis is indicative and based on general Dutch employment law principles. Consult a lawyer for specific advice.",
-    footerBy: "Contract2Check by",
+    disclaimer: "ContractClarity does not provide legal advice. The analysis is indicative and based on general Dutch employment law principles. Consult a lawyer for specific advice.",
+    footerBy: "ContractClarity by",
     footerRates: "Based on Dutch employment law",
     paywallTitle: "Your free analysis has been used",
     paywallSub: "One-time payment. No subscription.",
@@ -125,7 +125,7 @@ const T = {
     mostPopular: "MOST POPULAR",
   },
   fr: {
-    logo: "Contract2Check",
+    logo: "ContractClarity",
     tagline: "Comprenez ce que vous signez.",
     subtitle: "Importez votre contrat de travail. Notre IA explique chaque clause en langage clair, signale les termes abusifs et compare avec le droit du travail néerlandais.",
     uploadLabel: "Déposez votre contrat ici",
@@ -148,8 +148,8 @@ const T = {
     copyBtn: "📋 Copier l'analyse",
     copied: "✓ Copié",
     newAnalysis: "Analyser un nouveau contrat",
-    disclaimer: "Contract2Check ne fournit pas de conseils juridiques. L'analyse est indicative et basée sur les principes généraux du droit du travail néerlandais. Consultez un juriste pour des conseils spécifiques.",
-    footerBy: "Contract2Check par",
+    disclaimer: "ContractClarity ne fournit pas de conseils juridiques. L'analyse est indicative et basée sur les principes généraux du droit du travail néerlandais. Consultez un juriste pour des conseils spécifiques.",
+    footerBy: "ContractClarity par",
     footerRates: "Basé sur le droit du travail néerlandais",
     paywallTitle: "Votre analyse gratuite a été utilisée",
     paywallSub: "Paiement unique. Sans abonnement.",
@@ -516,7 +516,7 @@ export default function App() {
   const copyResult = () => {
     if (!result) return;
     const text = [
-      `Contract2Check analyse`,
+      `ContractClarity analyse`,
       `Score: ${result.score}/100`,
       ``,
       result.summary,
