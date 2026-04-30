@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const CHECKOUT_URL = "https://nexiotools.lemonsqueezy.com/checkout/buy/810771d8-f28e-4eb6-9624-d6e8f6a6e46f";
-const FREE_LIMIT = 1;
+const FREE_LIMIT = 2;
 const STORAGE_KEY = "contractclarity_uses";
 const WHITELIST_KEY = "contractclarity_whitelisted";
 
@@ -278,7 +278,7 @@ function PaywallModal({ onClose, onWhitelisted, t }) {
           </svg>
         </div>
 
-        <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800, color: "#f0ece8", marginBottom: 6, letterSpacing: "-0.4px" }}>{t.paywallTitle}</h2>
+        <h2 style={{ fontFamily: "Syne, sans-serif", fontSize: 22, fontWeight: 800, color: "#f0ece8", marginBottom: 6, letterSpacing: "-0.4px" }}>{t.paywallTitle}</h2>
         <p style={{ fontSize: 13, color: "rgba(240,236,232,0.5)", marginBottom: 24 }}>{t.paywallSub}</p>
 
         {/* Features */}
@@ -302,10 +302,10 @@ function PaywallModal({ onClose, onWhitelisted, t }) {
           <a key={tier.label} href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: tier.popular ? "#1a1a1a" : "rgba(255,255,255,0.03)", border: `1px solid ${tier.popular ? "#22c55e" : "rgba(255,255,255,0.08)"}`, borderRadius: 12, padding: "14px 16px", marginBottom: 8, textDecoration: "none", cursor: "pointer", position: "relative" }}>
             {tier.popular && <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: "#22c55e", color: "white", fontSize: 9, fontWeight: 700, padding: "3px 10px", borderRadius: 100, letterSpacing: "0.1em", whiteSpace: "nowrap" }}>{t.mostPopular}</div>}
             <div>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#f0ece8" }}>{tier.label}</div>
+              <div style={{ fontFamily: "Syne, sans-serif", fontSize: 14, fontWeight: 700, color: "#f0ece8" }}>{tier.label}</div>
               <div style={{ fontSize: 11, color: "rgba(240,236,232,0.4)", marginTop: 2 }}>{tier.period}</div>
             </div>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800, color: tier.popular ? "#22c55e" : "#f0ece8" }}>{tier.price}</div>
+            <div style={{ fontFamily: "Syne, sans-serif", fontSize: 22, fontWeight: 800, color: tier.popular ? "#22c55e" : "#f0ece8" }}>{tier.price}</div>
           </a>
         ))}
 
@@ -316,16 +316,16 @@ function PaywallModal({ onClose, onWhitelisted, t }) {
         {/* Email unlock */}
         <div style={{ marginTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 16 }}>
           {!showEmailEntry ? (
-            <button onClick={() => { setShowEmailEntry(true); setShowCodeEntry(false); }} style={{ background: "transparent", border: "none", color: "rgba(240,236,232,0.4)", fontSize: 12, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", textDecoration: "underline", display: "block", margin: "0 auto" }}>
+            <button onClick={() => { setShowEmailEntry(true); setShowCodeEntry(false); }} style={{ background: "transparent", border: "none", color: "rgba(240,236,232,0.4)", fontSize: 12, cursor: "pointer", fontFamily: "DM Sans, sans-serif", textDecoration: "underline", display: "block", margin: "0 auto" }}>
               {t.alreadyPaid}
             </button>
           ) : (
             <div>
               <div style={{ display: "flex", gap: 8 }}>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === "Enter" && handleValidateEmail()} placeholder={t.emailPlaceholder}
-                  style={{ flex: 1, background: "rgba(255,255,255,0.05)", border: `1px solid ${emailStatus === "error" || emailStatus === "expired" ? "rgba(255,80,80,0.4)" : emailStatus === "success" ? "rgba(80,200,120,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: 8, padding: "10px 14px", color: "#f0ece8", fontFamily: "'DM Sans', sans-serif", fontSize: 13, outline: "none" }} />
+                  style={{ flex: 1, background: "rgba(255,255,255,0.05)", border: `1px solid ${emailStatus === "error" || emailStatus === "expired" ? "rgba(255,80,80,0.4)" : emailStatus === "success" ? "rgba(80,200,120,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: 8, padding: "10px 14px", color: "#f0ece8", fontFamily: "DM Sans, sans-serif", fontSize: 13, outline: "none" }} />
                 <button onClick={handleValidateEmail} disabled={emailStatus === "checking" || emailStatus === "success"}
-                  style={{ background: emailStatus === "success" ? "rgba(80,200,120,0.2)" : "rgba(34,197,94,0.15)", border: `1px solid ${emailStatus === "success" ? "rgba(80,200,120,0.3)" : "rgba(34,197,94,0.3)"}`, color: emailStatus === "success" ? "#50c878" : "#22c55e", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600 }}>
+                  style={{ background: emailStatus === "success" ? "rgba(80,200,120,0.2)" : "rgba(34,197,94,0.15)", border: `1px solid ${emailStatus === "success" ? "rgba(80,200,120,0.3)" : "rgba(34,197,94,0.3)"}`, color: emailStatus === "success" ? "#50c878" : "#22c55e", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontFamily: "DM Sans, sans-serif", fontSize: 13, fontWeight: 600 }}>
                   {emailStatus === "checking" ? t.checking : emailStatus === "success" ? t.unlocked : t.unlockBtn}
                 </button>
               </div>
@@ -338,16 +338,16 @@ function PaywallModal({ onClose, onWhitelisted, t }) {
 
         {/* Access code */}
         {!showCodeEntry ? (
-          <button onClick={() => { setShowCodeEntry(true); setShowEmailEntry(false); }} style={{ background: "transparent", border: "none", color: "rgba(240,236,232,0.2)", fontSize: 11, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", textDecoration: "underline", display: "block", margin: "8px auto 0" }}>
+          <button onClick={() => { setShowCodeEntry(true); setShowEmailEntry(false); }} style={{ background: "transparent", border: "none", color: "rgba(240,236,232,0.2)", fontSize: 11, cursor: "pointer", fontFamily: "DM Sans, sans-serif", textDecoration: "underline", display: "block", margin: "8px auto 0" }}>
             {t.hasCode}
           </button>
         ) : (
           <div style={{ marginTop: 8 }}>
             <div style={{ display: "flex", gap: 8 }}>
               <input type="text" value={code} onChange={e => setCode(e.target.value)} onKeyDown={e => e.key === "Enter" && handleValidateCode()} placeholder={t.lang === "NL" ? "Toegangscode" : t.lang === "FR" ? "Code d'accès" : "Access code"}
-                style={{ flex: 1, background: "rgba(255,255,255,0.05)", border: `1px solid ${codeStatus === "error" ? "rgba(255,80,80,0.4)" : codeStatus === "success" ? "rgba(80,200,120,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: 8, padding: "10px 14px", color: "#f0ece8", fontFamily: "'DM Sans', sans-serif", fontSize: 13, outline: "none" }} />
+                style={{ flex: 1, background: "rgba(255,255,255,0.05)", border: `1px solid ${codeStatus === "error" ? "rgba(255,80,80,0.4)" : codeStatus === "success" ? "rgba(80,200,120,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: 8, padding: "10px 14px", color: "#f0ece8", fontFamily: "DM Sans, sans-serif", fontSize: 13, outline: "none" }} />
               <button onClick={handleValidateCode} disabled={codeStatus === "checking" || codeStatus === "success"}
-                style={{ background: codeStatus === "success" ? "rgba(80,200,120,0.2)" : "rgba(34,197,94,0.15)", border: `1px solid ${codeStatus === "success" ? "rgba(80,200,120,0.3)" : "rgba(34,197,94,0.3)"}`, color: codeStatus === "success" ? "#50c878" : "#22c55e", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600 }}>
+                style={{ background: codeStatus === "success" ? "rgba(80,200,120,0.2)" : "rgba(34,197,94,0.15)", border: `1px solid ${codeStatus === "success" ? "rgba(80,200,120,0.3)" : "rgba(34,197,94,0.3)"}`, color: codeStatus === "success" ? "#50c878" : "#22c55e", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontFamily: "DM Sans, sans-serif", fontSize: 13, fontWeight: 600 }}>
                 {codeStatus === "checking" ? t.checking : codeStatus === "success" ? t.unlocked : t.lang === "NL" ? "Toepassen" : t.lang === "FR" ? "Appliquer" : "Apply"}
               </button>
             </div>
@@ -387,7 +387,7 @@ function ScoreRing({ score }) {
         <circle cx="48" cy="48" r={r} fill="none" stroke={color} strokeWidth="7" strokeDasharray={`${dash} ${circ}`} strokeLinecap="round" style={{ transition: "stroke-dasharray 1s ease" }} />
       </svg>
       <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 24, fontWeight: 800, color, lineHeight: 1 }}>{score}</span>
+        <span style={{ fontFamily: "Syne, sans-serif", fontSize: 24, fontWeight: 800, color, lineHeight: 1 }}>{score}</span>
         <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>/100</span>
       </div>
     </div>
@@ -418,6 +418,13 @@ export default function App() {
   const abortRef = useRef(null);
 
   useEffect(() => {
+    if (!document.getElementById("cc-fonts")) {
+      const link = document.createElement("link");
+      link.id = "cc-fonts";
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap";
+      document.head.appendChild(link);
+    }
     try {
       const stored = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10);
       setUsesCount(stored);
@@ -551,9 +558,9 @@ export default function App() {
   const remaining = Math.max(0, FREE_LIMIT - usesCount);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0f", fontFamily: "'DM Sans', sans-serif", color: "#f0ece8" }}>
+    <div style={{ minHeight: "100vh", background: "#0a0a0f", fontFamily: "DM Sans, sans-serif", color: "#f0ece8" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
